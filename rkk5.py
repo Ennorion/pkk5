@@ -1,4 +1,9 @@
+# import libraries
+
+import urllib, urllib2
+import json
 import requests
+
 
 headers = {
         'pragma': 'no-cache',
@@ -7,6 +12,9 @@ headers = {
         'x-requested-with': 'XMLHttpRequest',
         }
 
-r = requests.get("https://pkk5.rosreestr.ru/api/features/1/66:26:2201001:4", headers=headers)
 
-print r.json()
+r = requests.get("http://pkk5.rosreestr.ru/api/features/1?text=65,210671+70,399301&tolerance=5", headers=headers).json()
+for i in r['features']:
+        print i['attrs']['address']
+
+
