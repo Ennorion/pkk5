@@ -1,10 +1,11 @@
 import argparse
 import requests
 
-
 def get_args():
-    parser = argparse.ArgumentParser(description='simple script to get cadastral number by coordinates')
-    parser.add_argument('-c', '--coordinates', action="store", dest="coords", type=str, required=True,
+    parser = argparse.ArgumentParser(description='simple script get some information by cadastral number')
+    parser.add_argument('-t', '--object_type', action="store", dest="type", type=str, required=True,
+                        help="1 for area, 5 for OKS")
+    parser.add_argument('-cn', '--cadastral_number', action="store", dest="cn", type=str, required=True,
                         help="coordinates separated by whitespace")
     args = parser.parse_args()
     return args
@@ -20,20 +21,18 @@ def get_headers():
     return headers
 
 
-def get_data(coords):
+def get_data(obj_type, cn):
 
     headers = get_headers()
-    coords = coords.replace(' ', '+')
 
-    r = requests.get("http://pkk5.rosreestr.ru/api/features/1?text={}&tolerance=5".format(coords), headers=headers).json()
+    r = requests.get('http://pkk5.rosreestr.ru/api/features/{0}/{1}'.format(obj_type, cn), headers=headers).json()
     return r
 
 
 def main():
-    data = get_data(get_args().coords)
-    for i in data['features']:
-        print 'cadastral number: ' + i['attrs']['cn']
-        print 'address: ' + i['attrs']['address']
+    data = get_data(get_args().type, get_args().cn)
+    for j in data['feature']['attrs']:
+        print j, data['feature']['attrs'][j]
 
 
 if __name__ == "__main__":
