@@ -1,3 +1,4 @@
+# coding=utf-8
 import argparse
 import requests
 
@@ -31,8 +32,16 @@ def get_data(obj_type, cn):
 
 def main():
     data = get_data(get_args().type, get_args().cn)
-    for j in data['feature']['attrs']:
-        print j, data['feature']['attrs'][j]
+    print("атрибуты объекта: %s" % get_args().cn)
+    for attr in data['feature']['attrs']:
+        print(attr, data['feature']['attrs'][attr])
+    print("координаты:")
+    print("\tцентр")
+    for coord in data['feature']['center']:
+        print("\t", coord, data['feature']['center'][coord])
+    print("\textent")
+    for extent in data['feature']['extent']:
+        print("\t", extent, data['feature']['extent'][extent])
 
 
 if __name__ == "__main__":
